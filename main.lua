@@ -2,7 +2,11 @@ local googleSignIn = require "plugin.googleSignIn"
 local json = require("json")
 googleSignIn.init()
 local widget = require("widget")
-local clientID = "replace with client id"
+local androidClientID = "replace with client id (android)"
+local clientID = "replace with client id (iOS)" -- iOS deafult
+if (system.getInfo("platform") == "android") then
+    clientID = androidClientID
+end
 local bg = display.newRect( display.contentCenterX, display.contentCenterY, display.actualContentWidth, display.actualContentHeight )
 bg:setFillColor( 0,0,1 )
 
