@@ -33,9 +33,12 @@ settings =
             },
 		},
 	},
-	
+	android= {
+		useGoogleServicesJson = true,
+	},
 	plugins =
     {
+
         ["plugin.googleSignIn"] =
         {
             publisherId = "tech.scotth",
