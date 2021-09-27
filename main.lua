@@ -1,36 +1,45 @@
 local googleSignIn = require "plugin.googleSignIn"
 local json = require("json")
-googleSignIn.init()
+
 local widget = require("widget")
-local androidClientID = "replace with client id (android)"
-local clientID = "replace with client id (iOS)" -- iOS deafult
-if (system.getInfo("platform") == "android") then
-    clientID = androidClientID
-end
+
+googleSignIn.init({
+ios={
+    clientId = "652763858765-ati8ar1t20ofebu4a39nhk7ea9oqmuu1.apps.googleusercontent.com"
+},
+android={
+    clientId = "652763858765-hq7huph5a5to4m39gqsoo7cn0ih3bd3d.apps.googleusercontent.com"
+}
+})
 googleSignIn.silentSignIn(function (e)
   if (e.isError) then
-  	print("please sign in before logging out")
+  	print(e.error)
   else
    print("you are signed in")
  end
 end)
+
 local bg = display.newRect( display.contentCenterX, display.contentCenterY, display.actualContentWidth, display.actualContentHeight )
 bg:setFillColor( 0,0,1 )
 
 local title = display.newText( "Google Sign In", display.contentCenterX, 40, native.systemFontBold ,30)
 
+
+function googleListener(event)
+    if (event.isError == true) then
+        native.showAlert("Error Sign In", event.error, {"Ok"})
+    elseif(event.status == "cancelled") then
+        native.showAlert("Sign In Cancelled", json.encode(event), {"Ok"})
+    elseif(event.status == "signed in") then
+        native.showAlert("Signed In", json.encode(event), {"Ok"})
+    elseif(event.status == "signed out") then
+        native.showAlert("Signed Out", json.encode(event), {"Ok"})
+    end
+end
+
 function signIn_onEvent(event)
 	if(event.phase == "ended")then
-		function listener(event)
-			print( "hi" )
-			if (event.isError == true) then
-		        native.showAlert("Error Sign In", event.error, {"Ok"})
-		    else
-		    	print(json.encode(event.email))
-		        native.showAlert("Signed In", json.encode(event), {"Ok"})
-		    end
-		end
-		googleSignIn.signIn({clientID= clientID, listener = listener})
+		googleSignIn.signIn(googleListener)
 	end
 end
 
@@ -45,23 +54,8 @@ local signIn = widget.newButton( {
 
 function signOut_onEvent(event)
 	if(event.phase == "ended")then
-		local function listener2(event)
-            print(event)
-            if(event.isError == true)then
-                native.showAlert( "Google", event.error, {"OKAY"} )
-                print(event.error)
-            else
-            print("Logged out from Google")
-            end
-        end
-        local function listener3(event)
-            print(event)
-            if(event.isError == false) then
-                print("Logged out from Google")
-            end
-        end
-        googleSignIn.signOut(listener2)
-        googleSignIn.Disconnect(listener2)
+        googleSignIn.disconnect(googleListener)
+        googleSignIn.signOut(googleListener)
 	end
 end
 
