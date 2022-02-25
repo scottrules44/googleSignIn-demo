@@ -42,6 +42,7 @@ settings =
         ["plugin.googleSignIn"] =
         {
             publisherId = "tech.scotth",
+            marketplaceId = "replace"
         },
     },
 }
