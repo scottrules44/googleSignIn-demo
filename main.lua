@@ -5,10 +5,10 @@ local widget = require("widget")
 
 googleSignIn.init({
 ios={
-    clientId = "652763858765-ati8ar1t20ofebu4a39nhk7ea9oqmuu1.apps.googleusercontent.com"
+    clientId = "replace with your own.apps.googleusercontent.com"
 },
 android={
-    clientId = "652763858765-hq7huph5a5to4m39gqsoo7cn0ih3bd3d.apps.googleusercontent.com"
+    clientId = "replace with your own.apps.googleusercontent.com"
 }
 })
 googleSignIn.silentSignIn(function (e)
